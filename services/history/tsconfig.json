@@ -4,11 +4,12 @@
     "target": "es2016",
     "module": "CommonJS",
     "outDir": "./dist",
+    "types": ["mocha"],
     "strict": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,    
   },
-  "include": ["src/**/*.ts"],
+  "include": ["src/**/*.ts", "tests/**/*.ts"],
   "exclude": ["node_modules"]
 }
