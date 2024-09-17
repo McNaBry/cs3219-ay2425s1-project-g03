@@ -37,18 +37,54 @@ services:
     container_name: question-db
     image: mongo:7.0.14
     environment:
-      MONGO_INITDB_ROOT_USERNAME: ${QUESTION_DB_USERNAME}
-      MONGO_INITDB_ROOT_PASSWORD: ${QUESTION_DB_PASSWORD}
+      MONGO_INITDB_ROOT_USERNAME: ${HISTORY_DB_USERNAME}
+      MONGO_INITDB_ROOT_PASSWORD: ${HISTORY_DB_PASSWORD}
     volumes:
       - question-db:/data/db
     networks:
       - question-db-network
+  
+  history:
+    container_name: history
+    image: history
+    build:
+      context: services/history
+      dockerfile: Dockerfile
+    ports:
+      - 8082:8082
+    environment:
+      DB_CLOUD_URI: ${HISTORY_DB_CLOUD_URI}
+      DB_LOCAL_URI: ${HISTORY_DB_LOCAL_URI}
+      DB_USERNAME: ${HISTORY_DB_USERNAME}
+      DB_PASSWORD: ${HISTORY_DB_PASSWORD}
+    volumes:
+      - /app/node_modules
+      - ./services/history:/app
+    networks:
+      - history-network
+      - history-db-network
+
+  history-db:
+    container_name: history-db
+    image: mongo:7.0.14
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${QUESTION_DB_USERNAME}
+      MONGO_INITDB_ROOT_PASSWORD: ${QUESTION_DB_PASSWORD}
+    volumes:
+      - history-db:/data/db
+    networks:
+      - history-db-network
 
 volumes:
   question-db:
+  history-db:
 
 networks:
   question-network:
     driver: bridge
   question-db-network:
+    driver: bridge
+  history-network:
+    driver: bridge
+  history-db-network:
     driver: bridge
