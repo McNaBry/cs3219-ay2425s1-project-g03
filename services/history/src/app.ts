@@ -1,7 +1,8 @@
 import express, { Express } from 'express';
 import morgan from 'morgan';
 import cors from 'cors';
-import router from './routes';
+import routes from './routes';
+import historyRoutes from './routes/historyRoutes';
 import bodyParser from 'body-parser';
 
 const app: Express = express();
@@ -21,6 +22,7 @@ app.use(
 );
 
 // Routes
-app.use('/', router);
+app.use('/', routes);
+app.use('/', historyRoutes);
 
 export default app;
