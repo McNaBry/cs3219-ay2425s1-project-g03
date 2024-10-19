@@ -11,6 +11,10 @@
             @if (isFindingMatch) {
                 <p-progressSpinner styleClass="w-2rem h-2rem mt-0" strokeWidth="6" />
                 <h2 class="mt-0 mb-0">Finding a Match...</h2>
+                <div class="flex gap-2 align-items-center">
+                    <i class="pi pi-stopwatch"></i>
+                    <p class="m-0">Time Left: {{ timeLeft }}</p>
+                </div>
             } @else {
                 <i class="pi pi-check text-4xl text-green-300"></i>
                 <h2 class="mt-0 mb-0">Match Found!</h2>

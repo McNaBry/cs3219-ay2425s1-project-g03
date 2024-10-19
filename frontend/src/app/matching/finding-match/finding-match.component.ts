@@ -27,8 +27,10 @@ export class FindingMatchComponent {
     @Output() matchSuccess = new EventEmitter<void>();
 
     isFindingMatch = true;
+    timeLeft!: number;
 
     matchPoll!: Subscription;
+    interval!: NodeJS.Timeout;
 
     constructor(
         private matchService: MatchService,
@@ -36,6 +38,7 @@ export class FindingMatchComponent {
     ) {}
 
     closeDialog() {
+        this.stopTimer();
         this.matchPoll.unsubscribe();
         this.matchService.deleteMatchRequest(this.matchId).subscribe({
             next: response => {
@@ -56,10 +59,12 @@ export class FindingMatchComponent {
     }
 
     onMatchFailed() {
+        this.stopTimer();
         this.matchFailed.emit();
     }
 
     onMatchSuccess() {
+        this.stopTimer();
         this.isFindingMatch = false;
         this.matchSuccess.emit();
         // Possible to handle routing to workspace here.
@@ -100,7 +105,25 @@ export class FindingMatchComponent {
         return timer(0, interval).pipe(switchMap(() => this.requestData()));
     }
 
+    startTimer(time: number) {
+        this.timeLeft = time;
+        this.interval = setInterval(() => {
+            if (this.timeLeft > 0) {
+                this.timeLeft--;
+            } else {
+                this.stopTimer();
+            }
+        }, 1000);
+    }
+
+    stopTimer() {
+        if (this.interval) {
+            clearInterval(this.interval);
+        }
+    }
+
     onDialogShow() {
+        this.startTimer(60);
         this.matchPoll = this.startPolling(5000).pipe(tap(), takeUntil(this.stopPolling$)).subscribe();
     }
 }
