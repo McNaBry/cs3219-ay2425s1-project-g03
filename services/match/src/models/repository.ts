@@ -35,3 +35,7 @@ export async function findMatchRequestAndDelete(id: string, userId: string) {
 export async function findMatchRequest(id: string, userId: string) {
     return await MatchRequestModel.findOne({ _id: id, userId });
 }
+
+export async function retrieveAllMatchRequests() {
+    return await MatchRequestModel.find({updatedAt: { $gte: oneMinuteAgo() }});
+}

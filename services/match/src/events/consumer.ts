@@ -1,6 +1,7 @@
 import { MatchRequestModel } from '../models/matchRequestModel';
 import { CollabCreatedEvent, MatchUpdatedEvent } from '../types/event';
 import { oneMinuteAgo } from '../utils/date';
+import { logQueueStatus } from '../utils/logger';
 import messageBroker from './broker';
 import { produceMatchFound } from './producer';
 import { Queues } from './queues';
@@ -11,6 +12,9 @@ async function consumeMatchUpdated(msg: MatchUpdatedEvent) {
         topics,
         difficulty,
     } = msg;
+
+    console.log("Attempting to find match for user", username);
+    await logQueueStatus();
 
     const match = await MatchRequestModel.findOneAndUpdate(
         {
@@ -24,8 +28,15 @@ async function consumeMatchUpdated(msg: MatchUpdatedEvent) {
         { $set: { pairId: requestId } },
     );
 
-    if (!match) return;
+    if (!match) {
+        console.log("Unable to find match for user", username);
+        await logQueueStatus();
+        return;
+    };
     await MatchRequestModel.findByIdAndUpdate(requestId, { $set: { pairId: match.id } });
+
+    console.log("Succesfully found match for user", username);
+    await logQueueStatus();
 
     const user1 = { id: userId, username, requestId };
     const user2 = { id: match.userId, username: match.username, requestId: match.id };

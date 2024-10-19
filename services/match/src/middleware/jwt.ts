@@ -10,7 +10,6 @@ export async function verifyAccessToken(req: Request, res: Response, next: NextF
         return;
     }
     try {
-        console.log(authHeader);
         const response = await axios.get<VerifyTokenResponse>('http://user:8082/auth/verify-token', {
             headers: { authorization: authHeader },
         });
