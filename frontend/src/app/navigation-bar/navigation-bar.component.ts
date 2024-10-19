@@ -39,7 +39,7 @@ export class NavigationBarComponent implements OnInit {
                         {
                             label: 'Find Match',
                             icon: 'pi pi-users',
-                            // route: '',
+                            route: '/matching',
                             class: 'p-submenu-list',
                         },
                         {
