@@ -48,7 +48,6 @@ export class FindingMatchComponent {
                     detail: `Something went wrong while cancelling your match.`,
                     life: 3000,
                 });
-                this.closeDialog();
             },
             complete: () => {
                 this.dialogClose.emit();
