@@ -133,7 +133,6 @@ export class MatchingComponent implements OnInit {
     onRetryMatchRequest() {
         this.isMatchFailed = false;
         this.isProcessingMatch = true;
-        // TODO: Add API request to retry matching.
     }
 
     onMatchDialogClose() {
