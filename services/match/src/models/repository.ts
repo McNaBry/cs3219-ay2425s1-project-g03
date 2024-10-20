@@ -24,8 +24,11 @@ export async function createMatchRequest(userId: string, username: string, topic
     return await new MatchRequestModel({ userId, username, topics, difficulty }).save();
 }
 
-export async function findMatchRequestAndUpdate(id: string, userId: string, topics: string[], difficulty: Difficulty) {
-    return await MatchRequestModel.findOneAndUpdate({ _id: id, userId }, { $set: { topics, difficulty } });
+export async function findMatchRequestAndUpdate(id: string, userId: string) {
+    return await MatchRequestModel.findOneAndUpdate(
+        { _id: id, userId, pairId: null },
+        { $set: { updatedAt: Date.now() } },
+    );
 }
 
 export async function findMatchRequestAndDelete(id: string, userId: string) {

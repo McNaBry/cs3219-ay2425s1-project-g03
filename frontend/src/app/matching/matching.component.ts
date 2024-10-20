@@ -17,7 +17,6 @@ import { Difficulty } from './user-criteria.model';
 import { ToastModule } from 'primeng/toast';
 import { MatchService } from '../../_services/match.service';
 import { MatchRequest } from './match.model';
-import { delay } from 'rxjs';
 
 @Component({
     selector: 'app-matching',

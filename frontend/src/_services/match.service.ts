@@ -19,18 +19,31 @@ export class MatchService extends ApiService {
         super();
     }
 
+    /**
+     * Creates a match request with the provided details. The match request will
+     * be valid for one minute.
+     */
     createMatchRequest(matchRequest: MatchRequest) {
         return this.http.post<MatchResponse>(this.apiUrl, matchRequest, this.httpOptions);
     }
 
+    /**
+     * Retrieves the match request and its current status
+     */
     retrieveMatchRequest(id: string) {
         return this.http.get<MatchResponse>(this.apiUrl + '/' + id);
     }
 
-    updateMatchRequest(id: string, matchRequest: MatchRequest) {
-        return this.http.put<MatchResponse>(this.apiUrl + '/' + id, matchRequest, this.httpOptions);
+    /**
+     * Refreshes the match request, effectively resetting its validity to one minute.
+     */
+    updateMatchRequest(id: string) {
+        return this.http.put<MatchResponse>(this.apiUrl + '/' + id, {}, this.httpOptions);
     }
 
+    /**
+     * Deletes the match request
+     */
     deleteMatchRequest(id: string) {
         return this.http.delete<MatchResponse>(this.apiUrl + '/' + id);
     }
