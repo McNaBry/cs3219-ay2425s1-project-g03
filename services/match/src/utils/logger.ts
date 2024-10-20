@@ -1,11 +1,8 @@
-import { MatchRequest } from "../models/matchRequestModel";
-import { retrieveAllMatchRequests } from "../models/repository";
-
+import { MatchRequest } from '../models/matchRequestModel';
+import { retrieveAllMatchRequests } from '../models/repository';
 
 export async function logQueueStatus(): Promise<void> {
-    const currentRequests = await retrieveAllMatchRequests() as MatchRequest[];
-    currentRequests.sort((r1, r2) => r1.updatedAt > r2.updatedAt ? 1 : -1);
-    
+    const currentRequests = (await retrieveAllMatchRequests()) as MatchRequest[];
     const queueStatus = currentRequests.map(r => ({
         username: r.username,
         topics: r.topics,

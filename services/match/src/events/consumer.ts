@@ -13,7 +13,7 @@ async function consumeMatchUpdated(msg: MatchUpdatedEvent) {
         difficulty,
     } = msg;
 
-    console.log("Attempting to find match for user", username);
+    console.log('Attempting to find match for user', username);
     await logQueueStatus();
 
     const match = await MatchRequestModel.findOneAndUpdate(
@@ -29,13 +29,13 @@ async function consumeMatchUpdated(msg: MatchUpdatedEvent) {
     );
 
     if (!match) {
-        console.log("Unable to find match for user", username);
+        console.log('Unable to find match for user', username);
         await logQueueStatus();
         return;
-    };
+    }
     await MatchRequestModel.findByIdAndUpdate(requestId, { $set: { pairId: match.id } });
 
-    console.log("Succesfully found match for user", username);
+    console.log('Succesfully found match for user', username);
     await logQueueStatus();
 
     const user1 = { id: userId, username, requestId };
