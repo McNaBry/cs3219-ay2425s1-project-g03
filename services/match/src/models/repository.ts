@@ -30,6 +30,7 @@ export async function findMatchRequestAndUpdate(id: IdType, userId: IdType) {
     return await MatchRequestModel.findOneAndUpdate(
         { _id: id, userId, pairId: null },
         { $set: { updatedAt: Date.now() } },
+        { new: true },
     );
 }
 
@@ -61,11 +62,12 @@ export async function findMatchRequestAndAssignPair(
             updatedAt: { $gte: oneMinuteAgo() },
         },
         { $set: { pairId: requestId } },
+        { new: true },
     );
 }
 
 export async function findMatchRequestByIdAndAssignPair(id: IdType, pairId: IdType) {
-    await MatchRequestModel.findByIdAndUpdate(id, { $set: { pairId } });
+    await MatchRequestModel.findByIdAndUpdate(id, { $set: { pairId } }, { new: true });
 }
 
 export async function findAndAssignCollab(requestId1: IdType, requestId2: IdType, collabId: IdType) {

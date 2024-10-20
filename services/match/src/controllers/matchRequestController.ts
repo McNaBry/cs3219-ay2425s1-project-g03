@@ -54,7 +54,7 @@ export const updateMatchRequest = async (req: Request, res: Response) => {
             matchRequest.topics,
             matchRequest.difficulty,
         );
-        handleSuccess(res, 201, 'Match request update successfully', matchRequest);
+        handleSuccess(res, 201, 'Match request updated successfully', matchRequest);
     } catch (error) {
         console.error('Error in updateMatchRequest:', error);
         handleInternalError(res, 'Failed to update match request');
