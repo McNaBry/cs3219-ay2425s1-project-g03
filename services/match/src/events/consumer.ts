@@ -1,10 +1,17 @@
-import { MatchRequestModel } from '../models/matchRequestModel';
+import {
+    findAndAssignCollab,
+    findMatchRequestAndAssignPair,
+    findMatchRequestByIdAndAssignPair,
+} from '../models/repository';
 import { CollabCreatedEvent, MatchUpdatedEvent } from '../types/event';
-import { oneMinuteAgo } from '../utils/date';
 import { logQueueStatus } from '../utils/logger';
 import messageBroker from './broker';
 import { produceMatchFound } from './producer';
 import { Queues } from './queues';
+
+function findCommonTopics(topics1: string[], topics2: string[]) {
+    return topics1.filter(topic => topics2.includes(topic));
+}
 
 async function consumeMatchUpdated(msg: MatchUpdatedEvent) {
     const {
@@ -16,37 +23,27 @@ async function consumeMatchUpdated(msg: MatchUpdatedEvent) {
     console.log('Attempting to find match for user', username);
     await logQueueStatus();
 
-    const match = await MatchRequestModel.findOneAndUpdate(
-        {
-            _id: { $ne: requestId },
-            userId: { $ne: userId },
-            pairId: null,
-            topics: { $in: topics },
-            difficulty,
-            updatedAt: { $gte: oneMinuteAgo() },
-        },
-        { $set: { pairId: requestId } },
-    );
+    const match = await findMatchRequestAndAssignPair(requestId, userId, topics, difficulty);
 
     if (!match) {
         console.log('Unable to find match for user', username);
         await logQueueStatus();
         return;
     }
-    await MatchRequestModel.findByIdAndUpdate(requestId, { $set: { pairId: match.id } });
+    await findMatchRequestByIdAndAssignPair(requestId, match.id);
 
     console.log('Succesfully found match for user', username);
     await logQueueStatus();
 
     const user1 = { id: userId, username, requestId };
     const user2 = { id: match.userId, username: match.username, requestId: match.id };
-    const commonTopics = topics.filter(topic => match.topics.includes(topic));
+    const commonTopics = findCommonTopics(topics, match.topics);
     await produceMatchFound(user1, user2, commonTopics, difficulty);
 }
 
 async function consumeCollabCreated(msg: CollabCreatedEvent) {
     const { requestId1, requestId2, collabId } = msg;
-    await MatchRequestModel.updateMany({ _id: { $in: [requestId1, requestId2] } }, { $set: { collabId } });
+    await findAndAssignCollab(requestId1, requestId2, collabId);
 }
 
 export async function initializeConsumers() {
