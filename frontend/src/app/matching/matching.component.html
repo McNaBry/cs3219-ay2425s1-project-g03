@@ -49,8 +49,8 @@
 
             <p-button
                 type="submit"
-                [label]="isProcessingMatch ? '' : 'Start Matching'"
-                [loading]="isProcessingMatch"
+                [label]="(isProcessingMatch || isInitiatingMatch) ? '' : 'Start Matching'"
+                [loading]="isProcessingMatch || isInitiatingMatch"
                 [disabled]="!matchForm.valid"
                 (click)="onMatch()"
                 styleClass="w-full justify-content-center" />
