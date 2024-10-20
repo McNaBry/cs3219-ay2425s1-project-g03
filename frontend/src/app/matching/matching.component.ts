@@ -62,7 +62,7 @@ export class MatchingComponent implements OnInit {
         this.fetchTopics();
         this.matchForm = new FormGroup(
             {
-                topics: new FormControl([], [Validators.minLength(1)]),
+                topics: new FormControl([], [Validators.required, Validators.minLength(1)]),
                 difficulty: new FormControl<Difficulty | null>(null, [Validators.required]),
             },
             {
