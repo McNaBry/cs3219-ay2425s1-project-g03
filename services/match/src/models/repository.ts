@@ -37,5 +37,5 @@ export async function findMatchRequest(id: string, userId: string) {
 }
 
 export async function retrieveAllMatchRequests() {
-    return await MatchRequestModel.find({updatedAt: { $gte: oneMinuteAgo() }});
+    return await MatchRequestModel.find({ pairId: null, updatedAt: { $gte: oneMinuteAgo() } }).sort({ updatedAt: 1 });
 }
