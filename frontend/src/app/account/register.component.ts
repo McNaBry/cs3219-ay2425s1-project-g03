@@ -41,7 +41,7 @@ export class RegisterComponent {
     ) {
         // redirect to home if already logged in
         if (this.authenticationService.userValue) {
-            this.router.navigate(['/']);
+            this.router.navigate(['/matching']);
         }
     }
 
@@ -99,9 +99,7 @@ export class RegisterComponent {
                 .pipe()
                 .subscribe({
                     next: () => {
-                        // get return url from route parameters or default to '/'
-                        const returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
-                        this.router.navigate([returnUrl]);
+                        this.router.navigate(['/matching']);
                     },
                     // error handling for registration because we assume there will be no errors with auto login
                     error: error => {
