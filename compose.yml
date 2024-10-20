@@ -97,7 +97,6 @@ services:
     depends_on:
       match-broker:
         condition: service_healthy
-
     networks:
       - gateway-network
       - match-db-network
@@ -123,9 +122,10 @@ services:
       - match-db-network
     healthcheck:
       test: rabbitmq-diagnostics check_port_connectivity
-      interval: 5s
-      timeout: 15s
-      retries: 20
+      interval: 30s
+      timeout: 30s
+      retries: 10
+      start_period: 30s
 
 volumes:
   question-db:
