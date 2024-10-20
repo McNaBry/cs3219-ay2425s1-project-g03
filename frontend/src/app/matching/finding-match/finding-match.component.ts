@@ -26,13 +26,11 @@ export class FindingMatchComponent {
     @Output() matchFailed = new EventEmitter<void>();
     @Output() matchSuccess = new EventEmitter<void>();
 
-    isFindingMatch = true;
-
-    timeLeft!: number;
-    interval!: NodeJS.Timeout;
-
-    matchPoll!: Subscription;
-    stopPolling$ = new EventEmitter();
+    protected isFindingMatch = true;
+    protected matchTimeLeft = 0;
+    protected matchTimeInterval!: NodeJS.Timeout;
+    protected matchPoll!: Subscription;
+    protected stopPolling$ = new EventEmitter();
 
     constructor(
         private matchService: MatchService,
@@ -111,10 +109,10 @@ export class FindingMatchComponent {
     }
 
     startTimer(time: number) {
-        this.timeLeft = time;
-        this.interval = setInterval(() => {
-            if (this.timeLeft > 0) {
-                this.timeLeft--;
+        this.matchTimeLeft = time;
+        this.matchTimeInterval = setInterval(() => {
+            if (this.matchTimeLeft > 0) {
+                this.matchTimeLeft--;
             } else {
                 this.stopTimer();
             }
@@ -122,8 +120,8 @@ export class FindingMatchComponent {
     }
 
     stopTimer() {
-        if (this.interval) {
-            clearInterval(this.interval);
+        if (this.matchTimeInterval) {
+            clearInterval(this.matchTimeInterval);
         }
     }
 }
