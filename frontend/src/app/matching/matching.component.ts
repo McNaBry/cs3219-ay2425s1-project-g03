@@ -17,6 +17,7 @@ import { Difficulty } from './user-criteria.model';
 import { ToastModule } from 'primeng/toast';
 import { MatchService } from '../../_services/match.service';
 import { MatchRequest } from './match.model';
+import { delay } from 'rxjs';
 
 @Component({
     selector: 'app-matching',
@@ -45,6 +46,7 @@ export class MatchingComponent implements OnInit {
     availableDifficulties = ['Easy', 'Medium', 'Hard'];
 
     isLoadingTopics = true;
+    isInitiatingMatch = false;
     isProcessingMatch = false;
     isMatchFailed = false;
     matchId!: string;
@@ -110,6 +112,7 @@ export class MatchingComponent implements OnInit {
     }
 
     onMatch() {
+        this.isInitiatingMatch = true;
         const matchRequest: MatchRequest = { topics: this.topics, difficulty: this.difficulty };
         console.log(matchRequest);
         this.matchService.createMatchRequest(matchRequest).subscribe({
@@ -120,6 +123,7 @@ export class MatchingComponent implements OnInit {
                 this.onErrorReceive('Failed to create a match. Please try again later.');
             },
             complete: () => {
+                this.isInitiatingMatch = false;
                 this.isProcessingMatch = true;
             },
         });
