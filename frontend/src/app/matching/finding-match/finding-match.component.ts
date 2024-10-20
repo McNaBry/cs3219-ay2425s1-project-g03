@@ -27,36 +27,17 @@ export class FindingMatchComponent {
     @Output() matchSuccess = new EventEmitter<void>();
 
     isFindingMatch = true;
+
     timeLeft!: number;
+    interval!: NodeJS.Timeout;
 
     matchPoll!: Subscription;
-    interval!: NodeJS.Timeout;
+    stopPolling$ = new EventEmitter();
 
     constructor(
         private matchService: MatchService,
         private messageService: MessageService,
     ) {}
-
-    closeDialog() {
-        this.stopTimer();
-        this.matchPoll.unsubscribe();
-        this.matchService.deleteMatchRequest(this.matchId).subscribe({
-            next: response => {
-                console.log(response);
-            },
-            error: () => {
-                this.messageService.add({
-                    severity: 'error',
-                    summary: 'Error',
-                    detail: `Something went wrong while cancelling your match.`,
-                    life: 3000,
-                });
-            },
-            complete: () => {
-                this.dialogClose.emit();
-            },
-        });
-    }
 
     onMatchFailed() {
         this.stopTimer();
@@ -70,7 +51,14 @@ export class FindingMatchComponent {
         // Possible to handle routing to workspace here.
     }
 
-    stopPolling$ = new EventEmitter();
+    onDialogShow() {
+        this.startTimer(60);
+        this.matchPoll = this.startPolling(5000).pipe(tap(), takeUntil(this.stopPolling$)).subscribe();
+    }
+
+    startPolling(interval: number): Observable<MatchResponse | null> {
+        return timer(0, interval).pipe(switchMap(() => this.requestData()));
+    }
 
     requestData() {
         return this.matchService.retrieveMatchRequest(this.matchId).pipe(
@@ -101,8 +89,25 @@ export class FindingMatchComponent {
         );
     }
 
-    startPolling(interval: number): Observable<MatchResponse | null> {
-        return timer(0, interval).pipe(switchMap(() => this.requestData()));
+    closeDialog() {
+        this.stopTimer();
+        this.matchPoll.unsubscribe();
+        this.matchService.deleteMatchRequest(this.matchId).subscribe({
+            next: response => {
+                console.log(response);
+            },
+            error: () => {
+                this.messageService.add({
+                    severity: 'error',
+                    summary: 'Error',
+                    detail: `Something went wrong while cancelling your match.`,
+                    life: 3000,
+                });
+            },
+            complete: () => {
+                this.dialogClose.emit();
+            },
+        });
     }
 
     startTimer(time: number) {
@@ -120,10 +125,5 @@ export class FindingMatchComponent {
         if (this.interval) {
             clearInterval(this.interval);
         }
-    }
-
-    onDialogShow() {
-        this.startTimer(60);
-        this.matchPoll = this.startPolling(5000).pipe(tap(), takeUntil(this.stopPolling$)).subscribe();
     }
 }
