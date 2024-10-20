@@ -49,7 +49,7 @@
 
             <p-button
                 type="submit"
-                [label]="(isProcessingMatch || isInitiatingMatch) ? '' : 'Start Matching'"
+                [label]="isProcessingMatch || isInitiatingMatch ? '' : 'Start Matching'"
                 [loading]="isProcessingMatch || isInitiatingMatch"
                 [disabled]="!matchForm.valid"
                 (click)="onMatch()"
@@ -64,7 +64,6 @@
         (matchFailed)="onMatchFailed()"
         (dialogClose)="onMatchDialogClose()" />
     <app-retry-matching
-        [userCriteria]="{ topics: topics, difficulty: difficulty }"
         [matchId]="matchId"
         [isVisible]="isMatchFailed"
         (retryMatch)="onRetryMatchRequest()"

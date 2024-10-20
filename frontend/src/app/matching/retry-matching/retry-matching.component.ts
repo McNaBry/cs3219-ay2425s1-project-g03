@@ -1,7 +1,6 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { ButtonModule } from 'primeng/button';
 import { DialogModule } from 'primeng/dialog';
-import { UserCriteria } from '../user-criteria.model';
 import { MatchService } from '../../../_services/match.service';
 import { MessageService } from 'primeng/api';
 
@@ -14,7 +13,6 @@ import { MessageService } from 'primeng/api';
 })
 export class RetryMatchingComponent {
     @Input() isVisible = false;
-    @Input() userCriteria!: UserCriteria;
     @Input() matchId!: string;
 
     @Output() dialogClose = new EventEmitter<void>();
@@ -30,10 +28,7 @@ export class RetryMatchingComponent {
     }
 
     onRetryMatch() {
-        this.matchService.updateMatchRequest(this.matchId, this.userCriteria).subscribe({
-            next: response => {
-                console.log(response);
-            },
+        this.matchService.updateMatchRequest(this.matchId).subscribe({
             error: () => {
                 this.messageService.add({
                     severity: 'error',

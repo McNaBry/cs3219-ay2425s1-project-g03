@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import { handleBadRequest, handleInternalError, handleNotFound, handleSuccess } from '../utils/responses';
 import { isValidObjectId } from 'mongoose';
-import { createMatchRequestSchema, updateMatchRequestSchema } from '../validation/matchRequestValidation';
+import { createMatchRequestSchema } from '../validation/matchRequestValidation';
 import {
     createMatchRequest as _createMatchRequest,
     findMatchRequestAndUpdate,
@@ -40,20 +40,20 @@ export const createMatchRequest = async (req: Request, res: Response) => {
  * @param res
  */
 export const updateMatchRequest = async (req: Request, res: Response) => {
-    const { error, value } = updateMatchRequestSchema.validate(req.body);
-    if (error) {
-        return handleBadRequest(res, error.message);
-    }
-
     const id = req.params.id;
     const { id: userId, username } = req.user;
-    const { topics, difficulty } = value;
     try {
-        const matchRequest = await findMatchRequestAndUpdate(id, userId, topics, difficulty);
+        const matchRequest = await findMatchRequestAndUpdate(id, userId);
         if (!matchRequest) {
             return handleNotFound(res, `Request ${id} not found`);
         }
-        await produceMatchUpdatedRequest(matchRequest.id, userId, username, topics, difficulty);
+        await produceMatchUpdatedRequest(
+            matchRequest.id,
+            userId,
+            username,
+            matchRequest.topics,
+            matchRequest.difficulty,
+        );
         handleSuccess(res, 201, 'Match request update successfully', matchRequest);
     } catch (error) {
         console.error('Error in updateMatchRequest:', error);
