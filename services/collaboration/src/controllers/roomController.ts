@@ -35,8 +35,6 @@ export interface Question {
 export const createRoomWithQuestion = async (user1: any, user2: any, question: Question) => {
     try {
         const roomId = await createRoomInDB(user1, user2, question);
-        // TODO: This is duplicated
-        await createYjsDocument(roomId.toString());
         return roomId;
     } catch (error) {
         console.error('Error fetching question or creating room:', error);
