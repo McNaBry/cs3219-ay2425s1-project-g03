@@ -320,3 +320,22 @@ docker compose down -v
       "collabId": "676e7c9a028e8780b3a73a58",
     }
     ```
+
+---
+
+### Match Failed Consumer
+
+- This consumer marks the match as failed.
+- **Queue**: `MATCH_FAILED` - This message is emitted when a match fails due to unexpected errors.
+- **Data Consumed**
+  - `requestId1` - The first request ID associated with the match failure.
+  - `requestId2` - The second request ID associated with the match failure.
+  - `reason` - The error encountered.
+
+  ```json
+    {
+      "requestId1": "6714d1806da8e6d033ac2be1",
+      "requestId2": "67144180cda8e610333e4b12",
+      "reason": "Failed to create room",
+    }
+    ```

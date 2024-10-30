@@ -47,7 +47,7 @@ export class MatchingComponent implements OnInit {
     isLoadingTopics = true;
     isInitiatingMatch = false;
     isProcessingMatch = false;
-    isMatchFailed = false;
+    isMatchTimeout = false;
     matchId!: string;
 
     constructor(
@@ -130,14 +130,14 @@ export class MatchingComponent implements OnInit {
         });
     }
 
-    onMatchFailed() {
+    onMatchTimeout() {
         this.isProcessingMatch = false;
-        this.isMatchFailed = true;
+        this.isMatchTimeout = true;
     }
 
     onRetryMatchRequest(matchId: string) {
         this.matchId = matchId;
-        this.isMatchFailed = false;
+        this.isMatchTimeout = false;
         this.isProcessingMatch = true;
     }
 
@@ -146,7 +146,7 @@ export class MatchingComponent implements OnInit {
     }
 
     onRetryMatchDialogClose() {
-        this.isMatchFailed = false;
+        this.isMatchTimeout = false;
     }
 
     removeTopic(topic: string) {

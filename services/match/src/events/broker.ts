@@ -1,8 +1,6 @@
 import client, { Channel, Connection } from 'amqplib';
 import config from '../config';
 
-// TODO: Add authentication
-
 /**
  * Adapated from
  * https://hassanfouad.medium.com/using-rabbitmq-with-nodejs-and-typescript-8b33d56a62cc

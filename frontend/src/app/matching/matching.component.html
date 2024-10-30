@@ -61,11 +61,11 @@
         [userCriteria]="{ topics: topics, difficulty: difficulty }"
         [matchId]="matchId"
         [isVisible]="isProcessingMatch"
-        (matchFailed)="onMatchFailed()"
+        (matchTimeout)="onMatchTimeout()"
         (dialogClose)="onMatchDialogClose()" />
     <app-retry-matching
         [matchRequest]="matchRequest"
-        [isVisible]="isMatchFailed"
+        [isVisible]="isMatchTimeout"
         (retryMatch)="onRetryMatchRequest($event)"
         (dialogClose)="onRetryMatchDialogClose()" />
 

@@ -55,3 +55,7 @@ export async function findMatchRequestByIdAndAssignPair(id: IdType, pairId: IdTy
 export async function findAndAssignCollab(requestId1: IdType, requestId2: IdType, collabId: IdType) {
     await MatchRequestModel.updateMany({ _id: { $in: [requestId1, requestId2] } }, { $set: { collabId } });
 }
+
+export async function findAndMarkError(requestId1: IdType, requestId2: IdType) {
+    await MatchRequestModel.updateMany({ _id: { $in: [requestId1, requestId2] } }, { $set: { hasError: true } });
+}
