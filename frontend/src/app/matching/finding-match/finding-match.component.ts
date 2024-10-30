@@ -57,7 +57,7 @@ export class FindingMatchComponent {
     }
 
     startPolling(interval: number): Observable<MatchResponse | null> {
-        return timer(0, interval).pipe(switchMap(() => this.requestData()));
+        return timer(5000, interval).pipe(switchMap(() => this.requestData()));
     }
 
     requestData() {
