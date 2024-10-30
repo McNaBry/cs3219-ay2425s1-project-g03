@@ -35,6 +35,7 @@ services:
       DB_LOCAL_URI: ${QUESTION_DB_LOCAL_URI}
       DB_USERNAME: ${QUESTION_DB_USERNAME}
       DB_PASSWORD: ${QUESTION_DB_PASSWORD}
+      BROKER_URL: ${BROKER_URL}
       JWT_SECRET: ${JWT_SECRET}
     networks:
       - gateway-network
@@ -147,6 +148,7 @@ services:
       BROKER_URL: ${BROKER_URL}
       JWT_SECRET: ${JWT_SECRET}
       QUESTION_SERVICE_URL: ${QUESTION_SERVICE_URL}
+
     depends_on:
       broker:
         condition: service_healthy
