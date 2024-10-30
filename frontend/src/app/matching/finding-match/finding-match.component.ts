@@ -76,6 +76,7 @@ export class FindingMatchComponent {
                             this.matchPoll.unsubscribe();
                         }, 2000);
                         break;
+                    case MatchStatus.MATCH_FAILED:
                     case MatchStatus.TIME_OUT:
                         this.stopPolling$.next(false);
                         this.onMatchFailed();
