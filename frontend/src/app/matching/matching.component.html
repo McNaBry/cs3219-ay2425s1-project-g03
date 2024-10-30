@@ -64,9 +64,9 @@
         (matchFailed)="onMatchFailed()"
         (dialogClose)="onMatchDialogClose()" />
     <app-retry-matching
-        [matchId]="matchId"
+        [matchRequest]="matchRequest"
         [isVisible]="isMatchFailed"
-        (retryMatch)="onRetryMatchRequest()"
+        (retryMatch)="onRetryMatchRequest($event)"
         (dialogClose)="onRetryMatchDialogClose()" />
 
     <p-toast position="bottom-right" [breakpoints]="{ '920px': { width: '90%' } }" />

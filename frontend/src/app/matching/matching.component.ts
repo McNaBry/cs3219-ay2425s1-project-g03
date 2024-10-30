@@ -102,6 +102,10 @@ export class MatchingComponent implements OnInit {
         return this.matchForm.dirty && this.matchForm.hasError(HAS_NO_QUESTIONS);
     }
 
+    get matchRequest(): MatchRequest {
+        return { topics: this.topics, difficulty: this.difficulty };
+    }
+
     onErrorReceive(errorMessage: string) {
         this.messageService.add({
             severity: 'error',
@@ -112,9 +116,7 @@ export class MatchingComponent implements OnInit {
 
     onMatch() {
         this.isInitiatingMatch = true;
-        const matchRequest: MatchRequest = { topics: this.topics, difficulty: this.difficulty };
-        console.log(matchRequest);
-        this.matchService.createMatchRequest(matchRequest).subscribe({
+        this.matchService.createMatchRequest(this.matchRequest).subscribe({
             next: response => {
                 this.matchId = response.data._id;
             },
@@ -133,7 +135,8 @@ export class MatchingComponent implements OnInit {
         this.isMatchFailed = true;
     }
 
-    onRetryMatchRequest() {
+    onRetryMatchRequest(matchId: string) {
+        this.matchId = matchId;
         this.isMatchFailed = false;
         this.isProcessingMatch = true;
     }

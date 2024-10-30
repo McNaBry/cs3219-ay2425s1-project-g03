@@ -71,46 +71,6 @@ docker compose down -v
 
 ---
 
-### Update Match Request
-
-- This endpoint updates the validity of the existing match request to 1 minute.
-- **HTTP Method**: `PUT`
-- **Endpoint**: http://localhost:8083/match/request/{requestId}
-- **Parameters**
-  -  `requestId` (Required) - The request ID of the match request.
-  - Example: `http://localhost:8083/match/request/6706b5d706ecde0138ca27a9`
-- **Headers**
-  - `Authorization: Bearer <JWT_ACCESS_TOKEN>` (Required)
-  - The endpoint requires the user to include a JWT (JSON Web Token) in the HTTP Request Header for authentication and authorization. This token is generated during the authentication process (i.e., login) and contains information about the user's identity. The server verifies this token to ensure that the client is authorized to access the data.
-- **Responses**
-
-    | Response Code               | Explanation                                                     |
-    |-----------------------------|-----------------------------------------------------------------|
-    | 200 (OK)                    | The match request is updated successfully.                      |
-    | 404 (Not Found)             | The match request with the specified `requestId` was not found. |
-    | 500 (Internal Server Error) | Unexpected error in the database or server.                     |
-
-  ```json
-    {
-      "status": "Success",
-      "message": "Match request updated successfully",
-      "data": {
-        "userId": "6713d1778986bf54b29bd0f8",
-        "username": "user123",
-        "topics": [
-            "Algorithms",
-            "Arrays"
-        ],
-        "difficulty": "Hard",
-        "_id": "6714d1806da8e6d033ac2be1",
-        "createdAt": "2024-10-20T09:46:40.877Z",
-        "updatedAt": "2024-10-20T09:49:57.332Z"
-      }
-    }
-  ```
-
----
-
 ### Delete Match Request
 
 - This endpoint deletes the match request.

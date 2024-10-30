@@ -16,14 +16,6 @@ export async function createMatchRequest(userId: IdType, username: string, topic
     return await new MatchRequestModel({ userId, username, topics, difficulty }).save();
 }
 
-export async function findMatchRequestAndUpdate(id: IdType, userId: IdType) {
-    return await MatchRequestModel.findOneAndUpdate(
-        { _id: id, userId, pairId: null },
-        { $set: { updatedAt: Date.now() } },
-        { new: true },
-    );
-}
-
 export async function findMatchRequestAndDelete(id: IdType, userId: IdType) {
     return await MatchRequestModel.findOneAndDelete({ _id: id, userId, updatedAt: { $gte: oneMinuteAgo() } });
 }
