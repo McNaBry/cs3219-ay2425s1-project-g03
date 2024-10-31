@@ -41,12 +41,9 @@ jobs:
             service:
               - '.services/${{ matrix.service }}/**'
 
-      - name: Exit if no changes found
-        if: steps.changes.output.service == 'false'
-        run: exit 0
-
       - name: Configure AWS credentials
         id: aws-configure
+        if: steps.changes.output.service == 'true'
         uses: aws-actions/configure-aws-credentials@v4.0.2
         with:
           role-to-assume: ${{ secrets.AWS_BACKEND_ROLE }}
@@ -55,10 +52,12 @@ jobs:
 
       - name: Login to AWS ECR
         id: login-ecr
+        if: steps.changes.output.service == 'true'
         uses: aws-actions/amazon-ecr-login@v2.0.1
 
       - name: Build and push ${{ matrix.service }} image to Amazon ECR
         id: build-image
+        if: steps.changes.output.service == 'true'
         env:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
           ECR_REPOSITORY: ${{ matrix.service }}
@@ -70,6 +69,7 @@ jobs:
 
       - name: Update AWS Service (${{ matrix.service }}) # Trigger re-deployment with latest image
         id: update-service
+        if: steps.changes.output.service == 'true'
         env:
           ECS_SERVICE: ${{ matrix.service }}-service
         run: |
