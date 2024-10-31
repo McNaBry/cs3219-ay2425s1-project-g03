@@ -4,10 +4,7 @@ on:
   push:
     branches: [ 'main' ]
     paths:
-      # - 'frontend/**'  # Only trigger if changes are made in the frontend directory
-  pull_request:
-    branches: [ 'main' ]
-    types: [ 'opened', 'reopened', 'synchronize'] 
+      - 'frontend/**'
 
   workflow_dispatch:
 
