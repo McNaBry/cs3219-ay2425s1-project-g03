@@ -5,7 +5,9 @@ on:
     branches: [ 'main' ]
     paths:
       - 'frontend/**'  # Only trigger if changes are made in the frontend directory
-
+  pull_request:
+    branches: [ 'main' ]
+    types: [ 'opened', 'reopened', 'synchronize'] 
   workflow_dispatch:
 
 permissions:
@@ -40,3 +42,7 @@ jobs:
       - name: Sync distribution to S3
         run: |
           aws s3 sync ./frontend/dist/frontend/browser/ s3://$S3_BUCKET_NAME --delete
+
+      - name: Invalidate Cloudfront Cache
+        run: |
+          aws cloudfront create-invalidation --distribution-id ${{ secrets.AWS_DISTRIBUTION_ID }} --paths "/*"
