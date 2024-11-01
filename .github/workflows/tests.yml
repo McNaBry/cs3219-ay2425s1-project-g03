@@ -23,7 +23,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        service: [frontend, services/question, services/user, services/match]
+        service: [frontend, services/question, services/user, services/match, services/collaboration]
     steps:
       - uses: actions/checkout@v4
       - name: Use Node.js

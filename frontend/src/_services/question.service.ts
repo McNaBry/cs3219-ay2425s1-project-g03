@@ -14,7 +14,7 @@ import { ApiService } from './api.service';
     providedIn: 'root',
 })
 export class QuestionService extends ApiService {
-    protected apiPath = 'question/questions';
+    protected apiPath = 'question';
 
     private httpOptions = {
         headers: new HttpHeaders({
@@ -51,8 +51,8 @@ export class QuestionService extends ApiService {
         return this.http.get<QuestionResponse>(this.apiUrl, { params });
     }
 
-    getQuestionByID(id: number): Observable<QuestionResponse> {
-        return this.http.get<QuestionResponse>(this.apiUrl + '/' + id);
+    getQuestionByID(id: number): Observable<SingleQuestionResponse> {
+        return this.http.get<SingleQuestionResponse>(this.apiUrl + '/' + id);
     }
 
     getQuestionByParam(topics: string[], difficulty: string, limit?: number): Observable<QuestionResponse> {

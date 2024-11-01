@@ -1,11 +1,13 @@
 import express, { NextFunction, Request, Response } from 'express';
 import cors from 'cors';
+import morgan from 'morgan';
 
 import userRoutes from './routes/user-routes';
 import authRoutes from './routes/auth-routes';
 
 const app = express();
 
+app.use(morgan('dev'));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(cors()); // config cors so that front-end can use
@@ -28,21 +30,13 @@ app.use((req: Request, res: Response, next: NextFunction) => {
     next();
 });
 
-app.use('/users', userRoutes);
-app.use('/auth', authRoutes);
+app.use('/api/user/users', userRoutes);
+app.use('/api/user/auth', authRoutes);
 
-app.get('/', (req: Request, res: Response) => {
-    console.log('Sending Greetings!');
+app.get('/ht', (req: Request, res: Response) => {
     res.json({
-        message: 'Hello World from user-service',
+        message: 'User Service is up and running!',
     });
-});
-
-// Handle When No Route Match Is Found
-app.use((req: Request, res: Response, next: NextFunction) => {
-    const error = new Error('Route Not Found');
-    res.status(404);
-    next(error);
 });
 
 export default app;

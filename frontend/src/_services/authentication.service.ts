@@ -48,6 +48,8 @@ export class AuthenticationService extends ApiService {
                     if (response.body) {
                         const { id, username, email, accessToken, isAdmin, createdAt } = response.body.data;
                         user = { id, username, email, accessToken, isAdmin, createdAt };
+
+                        // console.log('JWT Token:', accessToken);
                     }
                     localStorage.setItem('user', JSON.stringify(user));
                     this.userSubject.next(user);
